@@ -14,10 +14,6 @@ export async function POST(req: Request) {
 
   const user = await currentUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   const limit = await prisma?.user.findFirst({
     where: { email: user?.emailAddresses[0]?.emailAddress! },
     select: { paymentsCount: true },
