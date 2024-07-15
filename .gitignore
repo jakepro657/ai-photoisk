@@ -68,3 +68,14 @@ prisma/*
 !prisma/schema.prisma
 
 public/sw.js
+
+# repo
+node_modules
+*.keystore
+.gradle
+
+# build files
+app/build
+*.aab
+*.apk
+*idsig
