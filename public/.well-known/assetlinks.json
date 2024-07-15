@@ -2,10 +2,10 @@
   {
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
-      "namespace": "Photoisk",
+      "namespace": "android_app",
       "package_name": "com.photoisk.twa",
       "sha256_cert_fingerprints": [
-        "AA:FF:F7:18:3E:26:12:81:75:78:AE:15:D0:BE:70:8F:B4:C6:61:A4:25:3D:DC:B8:89:84:EE:0D:F0:47:E3:AF"
+        "06:ED:48:D8:19:30:8F:84:08:6D:09:FE:4D:26:6B:EA:7B:DD:98:D3:3D:73:1B:97:71:87:E4:D2:79:FA:6E:40"
       ]
     }
   }
