@@ -1,29 +1,153 @@
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid"; // UUID 라이브러리를 사용하여 고유 ID 생성
+import OpenAI from "openai";
+// import { currentUser } from "@clerk/nextjs/dist/types/server";
+import { put } from "@vercel/blob";
+import prisma from "@/utils/prisma";
 
-// 데이터베이스나 저장소를 대체할 임시 저장소 (예시)
-let imageDatabase = {};
+const openai = new OpenAI();
+
+function b64toBlob(b64Data: string, contentType = "") {
+  const image_data = atob(b64Data.split(",")[1]);
+
+  const arraybuffer = new ArrayBuffer(image_data.length);
+  const view = new Uint8Array(arraybuffer);
+
+  for (let i = 0; i < image_data.length; i++) {
+    view[i] = image_data.charCodeAt(i) & 0xff;
+  }
+
+  return new Blob([arraybuffer], { type: contentType });
+}
+
+const contentType = "image/png";
 
 export async function POST(request: Request) {
-  const { description } = await request.json();
-
   try {
-    // 이미지 생성
-    const generatedImage = await generateImageFromDescription(description);
+    const { image } = await request.json();
 
-    // 고유한 이미지 ID 생성
-    const imageId = uuidv4();
+    // const user = await currentUser();
 
-    // 생성된 이미지와 관련된 데이터를 저장
-    imageDatabase[imageId] = {
-      id: imageId,
-      url: generatedImage,
-      description,
-      createdAt: new Date().toISOString(),
-    };
+    // const foundUser = await prisma?.user.findFirst({
+    //   where: { email: user?.emailAddresses[0]?.emailAddress! },
+    // });
 
-    // 클라이언트에게 이미지와 이미지 ID 반환
-    return NextResponse.json({ imageId, image: generatedImage });
+    const blob = b64toBlob(image, contentType);
+
+    const originalFileName = `original_${Date.now()}.png`;
+    const { url: originalUrl } = await put(originalFileName, blob, {
+      access: "public",
+    });
+
+    const gptResponse = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `
+  
+          <context>
+            output format is string only with just one word.
+  
+            example:
+            - Man
+            - Woman
+          </context>
+  
+          <instruction>
+            Distinguish man or woman in the image.
+          </instruction>
+          `,
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "image_url",
+              image_url: {
+                url: image,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    // const gender = gptResponse.choices[0].message.content as string;
+
+    // await prisma?.original.create({
+    //   data: {
+    //     url: originalUrl,
+    //     gender: gender,
+    //     filename: originalFileName,
+    //     userId: ,
+    //   },
+    // });
+
+    const gptReponseForDetailed = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `
+
+          <context>
+            You are writing a detailed description of the image.
+            Should include:
+              - The person's nose
+              - The person's eyes
+              - The person's mouth
+              - The person's hair
+              - The person's face shape
+            You can refer to the types of person like people usually describe the ideal type of lover.
+
+            For example:
+              A person with a sharp nose like a bird, big eyes like a deer, and a small mouth like a cat.
+
+            output format is string only with just one words separated by comma.
+            IMPORTANT: OUTPUT SHOULD BE WRITTEN IN ENGLISH.
+            For example:
+              - big_bird_nose, small_deer_eyes, small_cat_mouth, long_brown_hair, round_face_shape
+              - sharp_nose, big_eyes, small_mouth, long_hair, round_face_shape
+          </context>
+  
+          <instruction>
+            Describe the face of the person in the image.
+          </instruction>
+        `,
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "image_url",
+              image_url: {
+                url: image,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    const description = gptReponseForDetailed.choices[0].message
+      .content as string;
+
+    const generatedImage = await fetch(
+      `${process.env.ML_SERVER_URL}/generate?prompt=${description}`,
+      {
+        method: "GET",
+      }
+    );
+
+    const generatedImageId = await generatedImage.json();
+
+    const generatedImageBlob = await fetch(
+      `${process.env.ML_SERVER_URL}/image/${generatedImageId}`
+    );
+
+    const b = await generatedImageBlob.blob();
+
+    return NextResponse.json({ id: generatedImageId, image: b });
   } catch (error) {
     console.error("Error generating image:", error);
     return NextResponse.json(
@@ -31,22 +155,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-// 이미지 생성 함수 (예시)
-async function generateImageFromDescription(description: string) {
-  const response = await fetch("https://api.openai.com/v1/images/generate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer YOUR_OPENAI_API_KEY`,
-    },
-    body: JSON.stringify({
-      prompt: description,
-      n: 1,
-      size: "1024x1024",
-    }),
-  });
-  const data = await response.json();
-  return data.data[0].url;
 }

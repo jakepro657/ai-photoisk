@@ -13,6 +13,30 @@ function PhotoEnrollmentScreen({ }: Props) {
     const [isTransformed, setIsTransformed] = useState(false);
     const [isLoaded, setIsLoaded] = useState(true);
 
+    const transformImage = async () => {
+        setIsLoaded(false);
+        try {
+            const res = await fetch('/api/images', {
+                method: 'POST',
+                body: JSON.stringify({ image: imageUrls[0] }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await res.json();
+
+            console.log(data);
+
+            const url = URL.createObjectURL(data.image);
+
+            setImageUrls([url]);
+            setIsLoaded(true);
+            setIsTransformed(true);
+        } catch (error) {
+            console.error('Failed to transform image', error);
+        }
+    }
+
     return (
         <div className='flex flex-col w-full justify-center'>
             <h1 className='font-PretendardBold text-lg text-center'>찍은 사진을 이제 AI로 변환하여 등록해볼까요?</h1>
@@ -32,20 +56,12 @@ function PhotoEnrollmentScreen({ }: Props) {
                 </div>
             ) : (
                 <Button
-                    onClick={() => setIsTransformed(true)}
+                    onClick={transformImage}
                     className='rounded-full w-2/3 mx-auto'
                 >
                     변환하기
                 </Button>
 
-            )}
-            {isTransformed && (
-                // <div className='px-8 py-4'>
-                //     <Image className='rounded-xl' src={""} alt='Photo' width={500} height={500} />
-                // </div>
-                <div className='px-8 py-4'>
-                    <div className='rounded-xl mx-auto my-auto w-full h-[200px] bg-gray-100' />
-                </div>
             )}
         </div>
     )
