@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
           {
             type: "image_url",
             image_url: {
-              url: originalUrl,
+              url: image,
             },
           },
         ],
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
           {
             type: "image_url",
             image_url: {
-              url: originalUrl,
+              url: image
             },
           },
         ],
