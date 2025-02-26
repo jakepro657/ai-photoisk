@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { image, prompt } = body;
 
+  console.log(image, prompt);
+
   // const { userId } = auth();
 
   // if (!userId) {
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
   }
 
   const gptResponse = await openai.chat.completions.create({
-    model: "gpt-4o-2024-05-13",
+    model: "gpt-4o",
     messages: [
       {
         role: "system",
