@@ -53,6 +53,8 @@ export async function POST(request: NextRequest) {
     access: "public",
   });
 
+  console.log(originalUrl);
+
   // if (!originalUrl) {
   //   return NextResponse.json({ error: "No image provided" }, { status: 400 });
   // }
@@ -174,9 +176,15 @@ export async function POST(request: NextRequest) {
     },
   });
 
+  console.log("output", output);
+
   const imageUrl = (output as string[])?.[0];
 
+  console.log("imageUrl", imageUrl);
+
   const imageFile = await fetch(imageUrl).then((res) => res.blob());
+
+  console.log("imageFile", imageFile);
 
   const filename = `img_${Date.now()}.png`;
 
