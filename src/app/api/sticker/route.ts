@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
 
   const output = await replicate.run(process.env.REPLICATE_MODEL as any, {
     input: {
-      prompt: `(masterpiece), (detailed), frontal face, ID photo, ${gender}, ${description}, ${
+      prompt: `(masterpiece), (detailed), frontal face, ID photo img, ${gender}, ${description}, ${
         prompt == "" ? "" : detailedPrompt
       }`,
       num_steps: 50,
