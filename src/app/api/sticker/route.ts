@@ -59,75 +59,75 @@ export async function POST(request: NextRequest) {
   //   return NextResponse.json({ error: "No image provided" }, { status: 400 });
   // }
 
-  const gptResponse = await openai.chat.completions.create({
-    model: "gpt-4o-2024-05-13",
-    messages: [
-      {
-        role: "system",
-        content: `
+  // const gptResponse = await openai.chat.completions.create({
+  //   model: "gpt-4o-2024-05-13",
+  //   messages: [
+  //     {
+  //       role: "system",
+  //       content: `
 
-        <context>
-          output format is string only with just one word.
+  //       <context>
+  //         output format is string only with just one word.
 
-          example:
-          - Man
-          - Woman
-        </context>
+  //         example:
+  //         - Man
+  //         - Woman
+  //       </context>
 
-        <instruction>
-          Distinguish man or woman in the image.
-        </instruction>
-        `,
-      },
-      {
-        role: "user",
-        content: [
-          {
-            type: "image_url",
-            image_url: {
-              url: originalUrl
-            },
-          },
-        ],
-      },
-    ],
-  });
+  //       <instruction>
+  //         Distinguish man or woman in the image.
+  //       </instruction>
+  //       `,
+  //     },
+  //     {
+  //       role: "user",
+  //       content: [
+  //         {
+  //           type: "image_url",
+  //           image_url: {
+  //             url: originalUrl
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // });
 
-  const gender = gptResponse.choices[0].message.content as string;
+  // const gender = gptResponse.choices[0].message.content as string;
 
-  const gptReponseForDetailed = await openai.chat.completions.create({
-    model: "gpt-4o-2024-05-13",
-    messages: [
-      {
-        role: "system",
-        content: `
+  // const gptReponseForDetailed = await openai.chat.completions.create({
+  //   model: "gpt-4o-2024-05-13",
+  //   messages: [
+  //     {
+  //       role: "system",
+  //       content: `
 
-        <context>
-          output format is string only with just one words separated by comma.
+  //       <context>
+  //         output format is string only with just one words separated by comma.
 
-          example
-          - a person, white blouse, long hair, glasses, smiling
-        </context>
+  //         example
+  //         - a person, white blouse, long hair, glasses, smiling
+  //       </context>
 
-        <instruction>
-          Describe the image in detail.
-          !important: only 5 features of the person in the image.
-        </instruction>
-        `,
-      },
-      {
-        role: "user",
-        content: [
-          {
-            type: "image_url",
-            image_url: {
-              url: originalUrl
-            },
-          },
-        ],
-      },
-    ],
-  });
+  //       <instruction>
+  //         Describe the image in detail.
+  //         !important: only 5 features of the person in the image.
+  //       </instruction>
+  //       `,
+  //     },
+  //     {
+  //       role: "user",
+  //       content: [
+  //         {
+  //           type: "image_url",
+  //           image_url: {
+  //             url: originalUrl
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // });
 
   // 턱수염이 조금 있고 뒷 배경의 색감이 알록달록 하면 좋겠어.
   let detailedPrompt = null;
@@ -160,14 +160,17 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const description = gptReponseForDetailed.choices[0].message
-    .content as string;
+  // const description = gptReponseForDetailed.choices[0].message
+  //   .content as string;
 
   const output = await replicate.run(process.env.REPLICATE_MODEL as any, {
     input: {
       num_steps: 50,
       input_image: originalUrl,
-      prompt: `(masterpiece), (detailed), frontal face, ID photo, ${gender}, ${description}, ${
+      // prompt: `(masterpiece), (detailed), frontal face, ID photo, ${gender}, ${description}, ${
+      //   prompt == "" ? "" : detailedPrompt
+      // }`,
+      prompt: `(masterpiece), (detailed), frontal face, ID photo ${
         prompt == "" ? "" : detailedPrompt
       }`,
       negative_prompt:
@@ -195,7 +198,7 @@ export async function POST(request: NextRequest) {
   await prisma?.original.create({
     data: {
       url: originalUrl,
-      gender: gender,
+      gender: "X",
       filename: originalFileName,
       userId: foundUser?.id,
     },
@@ -204,7 +207,7 @@ export async function POST(request: NextRequest) {
   await prisma?.generated.create({
     data: {
       url: url,
-      gender: gender,
+      gender: "X",
       filename: filename,
       userId: foundUser?.id,
     },
