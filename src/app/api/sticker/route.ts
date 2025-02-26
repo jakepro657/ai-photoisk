@@ -53,9 +53,9 @@ export async function POST(request: NextRequest) {
     access: "public",
   });
 
-  if (!image) {
-    return NextResponse.json({ error: "No image provided" }, { status: 400 });
-  }
+  // if (!originalUrl) {
+  //   return NextResponse.json({ error: "No image provided" }, { status: 400 });
+  // }
 
   const gptResponse = await openai.chat.completions.create({
     model: "gpt-4o",
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
   const output = await replicate.run(process.env.REPLICATE_MODEL as any, {
     input: {
       num_steps: 50,
-      input_image: image,
+      input_image: originalUrl,
       prompt: `(masterpiece), (detailed), frontal face, ID photo, ${gender}, ${description}, ${
         prompt == "" ? "" : detailedPrompt
       }`,
