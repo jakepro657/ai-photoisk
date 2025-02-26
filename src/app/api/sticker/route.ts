@@ -139,16 +139,8 @@ export async function POST(request: NextRequest) {
         {
           role: "system",
           content: `
-  
-          <context>
-            output format is string only with just one words separated by comma.
-            IMPORTANT: OUTPUT SHOULD BE WRITTEN IN ENGLISH.
-            example
-            - a person, white blouse, long hair, glasses, smiling
-          </context>
-  
           <instruction>
-            Rewrite the input texts in detail.
+            Translate the input texts in English.
           </instruction>
           `,
         },
@@ -157,8 +149,10 @@ export async function POST(request: NextRequest) {
           content: prompt,
         },
       ],
-    });
+    })
   }
+
+  const trans = detailedPrompt?.choices[0].message.content as string;
 
   const description = gptReponseForDetailed.choices[0].message
     .content as string;
@@ -169,9 +163,7 @@ export async function POST(request: NextRequest) {
 
   const output = await replicate.run(process.env.REPLICATE_MODEL as any, {
     input: {
-      prompt: `(masterpiece), (detailed), frontal face, ID photo img, ${gender}, ${description}, ${
-        prompt == "" ? "" : detailedPrompt
-      }`,
+      prompt: `(masterpiece), (detailed), frontal face, ID photo img, ${gender}, ${description}, ${trans}`,
       num_steps: 50,
       input_image: originalUrl == "" ? blob : originalUrl,
       image: originalUrl == "" ? blob : originalUrl,
