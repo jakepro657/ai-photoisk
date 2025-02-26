@@ -81,12 +81,10 @@ export async function POST(request: NextRequest) {
       },
       {
         role: "user",
-        content: [
+        content: "", // 텍스트는 비워둡니다.
+        images: [
           {
-            type: "image_url",
-            image_url: {
-              url: image,
-            },
+            image_url: originalUrl, // images 배열로 전달
           },
         ],
       },
@@ -117,12 +115,10 @@ export async function POST(request: NextRequest) {
       },
       {
         role: "user",
-        content: [
+        content: "", // 텍스트는 비워둡니다.
+        images: [
           {
-            type: "image_url",
-            image_url: {
-              url: image
-            },
+            image_url: originalUrl, // images 배열로 전달
           },
         ],
       },
