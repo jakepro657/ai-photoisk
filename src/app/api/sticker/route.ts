@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { image, prompt } = body;
 
+  console.log(image, prompt);
+
   // const { userId } = auth();
 
   // if (!userId) {
@@ -51,12 +53,14 @@ export async function POST(request: NextRequest) {
     access: "public",
   });
 
-  if (!image) {
-    return NextResponse.json({ error: "No image provided" }, { status: 400 });
-  }
+  console.log(originalUrl);
+
+  // if (!originalUrl) {
+  //   return NextResponse.json({ error: "No image provided" }, { status: 400 });
+  // }
 
   const gptResponse = await openai.chat.completions.create({
-    model: "gpt-4o-2024-05-13",
+    model: "gpt-4o",
     messages: [
       {
         role: "system",
@@ -81,7 +85,7 @@ export async function POST(request: NextRequest) {
           {
             type: "image_url",
             image_url: {
-              url: image,
+              url: originalUrl
             },
           },
         ],
@@ -92,7 +96,7 @@ export async function POST(request: NextRequest) {
   const gender = gptResponse.choices[0].message.content as string;
 
   const gptReponseForDetailed = await openai.chat.completions.create({
-    model: "gpt-4o",
+    model: "gpt-4o-2024-05-13",
     messages: [
       {
         role: "system",
@@ -117,7 +121,7 @@ export async function POST(request: NextRequest) {
           {
             type: "image_url",
             image_url: {
-              url: image,
+              url: originalUrl
             },
           },
         ],
@@ -130,21 +134,13 @@ export async function POST(request: NextRequest) {
 
   if (prompt) {
     detailedPrompt = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-2024-05-13",
       messages: [
         {
           role: "system",
           content: `
-  
-          <context>
-            output format is string only with just one words separated by comma.
-            IMPORTANT: OUTPUT SHOULD BE WRITTEN IN ENGLISH.
-            example
-            - a person, white blouse, long hair, glasses, smiling
-          </context>
-  
           <instruction>
-            Rewrite the input texts in detail.
+            Translate the input texts in English.
           </instruction>
           `,
         },
@@ -153,35 +149,40 @@ export async function POST(request: NextRequest) {
           content: prompt,
         },
       ],
-    });
+    })
   }
+
+  const trans = detailedPrompt?.choices[0].message.content as string;
 
   const description = gptReponseForDetailed.choices[0].message
     .content as string;
 
+  console.log ("description", description);
+
+  console.log("url", originalUrl);
+
   const output = await replicate.run(process.env.REPLICATE_MODEL as any, {
     input: {
-      steps: 20,
-      image: image,
-      width: 600,
-      height: 800,
-      prompt: `(masterpiece), (detailed), frontal face, ID photo, ${gender}, ${description}, ${
-        prompt == "" ? "" : detailedPrompt
-      }`,
-      seed: 1491407637,
-      upscale_steps: 10,
+      prompt: `(masterpiece), (detailed), frontal face, ID photo img, ${gender}, ${description}, ${trans}`,
+      num_steps: 50,
+      input_image: originalUrl == "" ? blob : originalUrl,
+      image: originalUrl == "" ? blob : originalUrl,
       negative_prompt:
-        "face painting, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, low resolution, 3d model, deformed hands, deformed feet, deformed face, deformed body parts, same haircut, eyes without pupils, doubled image, mid aged man, old men, logo in frame, gun, man with more than one penis on body, scared facial expression, drawing, painting, blur focus, blur, photo effects, skinny guy, make-up on male, angry facial expression, same human face in one frame, illustration, anime, cartoon, ugly face, bruises, cartoon, anime, painting, red color saturation, unattractive face, jpeg artifacts, frame, Violence, Gore, Blood, War, Weapons, Death, Destruction, Fire, Explosions, Pollution, Garbage, Graffiti, Vandalism, Rust, Decay, Filth, Disease, Insects, Rodents, Vermin, Darkness, Shadows, Nightmares, Fear, Horror, Sadness, Depression, Pain, Suffering, Anguish, Despair, Loneliness, Isolation, Neglect, Abandonment, Negativity, Hate, Racism, Sexism, Homophobia, Discrimination, Intolerance, Prejudice, Ignorance, Arrogance, Greed, Selfishness, Cruelty, Insanity, Madness, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, deformed, ugly, mutilated, disfigured, text, extra limbs, face cut, head cut, extra fingers, extra arms, poorly drawn face, mutation, bad proportions, cropped head, malformed limbs, mutated hands, fused fingers, long neck, illustration, painting, drawing, art, sketch, disfigured, kitsch, ugly, oversaturated, grain, low-res, Deformed, blurry, bad anatomy, disfigured, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, blurry, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, ugly, disgusting, poorly drawn, childish, mutilated, , mangled, old, surreal, decoration, particles",
-      prompt_strength: 4.5,
-      ip_adapter_noise: 0.5,
-      ip_adapter_weight: 0.1,
-      instant_id_strength: 0.7,
+        "face painting, ugly, duplvvicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, low resolution, 3d model, deformed hands, deformed feet, deformed face, deformed body parts, same haircut, eyes without pupils, doubled image, mid aged man, old men, logo in frame, gun, man with more than one penis on body, scared facial expression, drawing, painting, blur focus, blur, photo effects, skinny guy, make-up on male, angry facial expression, same human face in one frame, illustration, anime, cartoon, ugly face, bruises, cartoon, anime, painting, red color saturation, unattractive face, jpeg artifacts, frame, Violence, Gore, Blood, War, Weapons, Death, Destruction, Fire, Explosions, Pollution, Garbage, Graffiti, Vandalism, Rust, Decay, Filth, Disease, Insects, Rodents, Vermin, Darkness, Shadows, Nightmares, Fear, Horror, Sadness, Depression, Pain, Suffering, Anguish, Despair, Loneliness, Isolation, Neglect, Abandonment, Negativity, Hate, Racism, Sexism, Homophobia, Discrimination, Intolerance, Prejudice, Ignorance, Arrogance, Greed, Selfishness, Cruelty, Insanity, Madness, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, deformed, ugly, mutilated, disfigured, text, extra limbs, face cut, head cut, extra fingers, extra arms, poorly drawn face, mutation, bad proportions, cropped head, malformed limbs, mutated hands, fused fingers, long neck, illustration, painting, drawing, art, sketch, disfigured, kitsch, ugly, oversaturated, grain, low-res, Deformed, blurry, bad anatomy, disfigured, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, blurry, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, ugly, disgusting, poorly drawn, childish, mutilated, , mangled, old, surreal, decoration, particles",
+      style_strength_ratio: 35,
+      style_name: "Disney Charactor",
     },
   });
 
+  console.log("output", output);
+
   const imageUrl = (output as string[])?.[0];
 
+  console.log("imageUrl", imageUrl);
+
   const imageFile = await fetch(imageUrl).then((res) => res.blob());
+
+  console.log("imageFile", imageFile);
 
   const filename = `img_${Date.now()}.png`;
 
