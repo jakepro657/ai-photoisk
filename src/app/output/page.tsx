@@ -16,7 +16,7 @@ function Home({ }: Props) {
   const [loading, setLoading] = useState(true);
   const [url, setUrl] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [showingImg, setShowingImg] = useState<any>(null);
+  const [showingImg, setShowingImg] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     setTimeout(() => {
@@ -40,8 +40,7 @@ function Home({ }: Props) {
     })
       .then((res) => res.blob())
       .then((data) => {
-        const tmp = data as any
-        const shareData = new File([tmp], "image.png", {
+        const shareData = new File([data], "image.png", {
           type: "image/png",
         });
         setFile(shareData);
@@ -87,7 +86,7 @@ function Home({ }: Props) {
             <Button
               onClick={() =>
                 navigator.share({
-                  files: [file as any],
+                  files: [file!],
                   title: "숭실대 SSCC & PHOTOisk",
                   text: "PHOTOisk에서 나만의 AI사진을 만들어보세요!",
                 })

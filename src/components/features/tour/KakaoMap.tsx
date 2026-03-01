@@ -2,6 +2,7 @@ import { useGeo } from "@/hooks/useGeo";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import type { PlacePin } from "@/types";
 
 const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: number } | null; setPosition: (position: { lat: number; lng: number }) => void }) => {
 
@@ -11,13 +12,13 @@ const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: num
   const [pinRecCount, setPinRecCount] = useState(0);
 
   const [isOpen, setIsOpen] = useState<boolean[] | null>(null);
-  const handleMapClick = (_: any, mouseEvent: kakao.maps.event.MouseEvent) => {
+  const handleMapClick = (_: kakao.maps.Map, mouseEvent: kakao.maps.event.MouseEvent) => {
     const latlng = mouseEvent.latLng;
     setPosition({ lat: latlng.getLat(), lng: latlng.getLng() });
     setIsOpen(null)
   };
 
-  const [pins, setPins] = useState<any | null>(null);
+  const [pins, setPins] = useState<PlacePin[] | null>(null);
 
   useEffect(() => {
     async function loadPins() {
@@ -48,7 +49,7 @@ const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: num
     setPinRecCount(data.message);
     setIsOpen((prev) => {
       if (!prev) {
-        return new Array(pins.length).fill(false);
+        return new Array(pins?.length ?? 0).fill(false);
       }
       return prev.map((_, i) => i === index);
     });
@@ -75,7 +76,7 @@ const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: num
       {position && (
         <MapMarker position={position} />
       )}
-      {pins?.map((pin: any, index: number) => (
+      {pins?.map((pin, index) => (
         <>
           <MapMarker clickable={true} onClick={() => handleMarkerClick(pin.id, index)} title={pin.title} key={index} position={{ lat: pin.y, lng: pin.x }}>
             {isOpen && isOpen[index] && (

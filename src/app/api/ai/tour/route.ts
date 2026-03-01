@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { generateText } from "@/lib/ai";
+import type {
+  TourEventRequest,
+  TourPlaceBasedRequest,
+  TourEventResponse,
+  TourPlaceBasedResponse,
+  TourRecommendItem,
+} from "@/types";
 
 // A01 - 자연
 // A02 - 인문(문화/예술/역사)
@@ -93,7 +100,7 @@ export async function POST(req: Request) {
   }
 
   if (TYPE === "recommend") {
-    const recommends: any[] = []; // await prisma?.placeForRec.findMany({
+    const recommends: TourRecommendItem[] = []; // await prisma?.placeForRec.findMany({
     // where: {
     //   x: {
     //     gte: mapX - radius,
@@ -177,7 +184,7 @@ export async function POST(req: Request) {
 
     console.log("sortedList", sortedList);
 
-    const handler = async (item: any) => {
+    const handler = async (item: TourRecommendItem) => {
       const responseForOverview = await fetch(
         `http://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=${process.env.TOUR_API_KEY}&MobileOS=AND&MobileApp=Photoisk&_type=json&numOfRows=10&pageNo=${pageNo}&contentId=${item.contentId}&overviewYN=Y`,
         {
@@ -271,14 +278,14 @@ export async function POST(req: Request) {
 
     const pfr = await prisma.placeForRec.create({
       data: {
-        x: parseFloat(ret.x),
-        y: parseFloat(ret.y),
+        x: ret.x,
+        y: ret.y,
         isHotplace: ret.isHotplace,
         isAdvertisement: ret.isAdvertisement,
         title: ret.title,
         description: ret.description,
-        contentTypeId: parseInt(ret.contentTypeId),
-        contentId: parseInt(ret.contentId),
+        contentTypeId: ret.contentTypeId,
+        contentId: ret.contentId,
         userId: userExists?.id as number,
       },
     });

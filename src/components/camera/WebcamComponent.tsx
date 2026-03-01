@@ -3,7 +3,7 @@ import { CameraIcon, SwitchCameraIcon } from "lucide-react";
 import React, { useCallback, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useCameraStore } from "@/stores/camera-store";
-import { Camera } from "react-camera-pro";
+import { Camera, CameraType } from "react-camera-pro";
 import { motion, useAnimate } from "framer-motion";
 import Image from "next/image";
 
@@ -24,10 +24,10 @@ function WebcamComponent({ mode }: Props) {
 
   const [scope, animate] = useAnimate();
 
-  const webcamRef = useRef<any>(null);
+  const webcamRef = useRef<CameraType>(null);
 
   const flipCamera = () => {
-    webcamRef.current.switchCamera()
+    webcamRef.current?.switchCamera()
     setIsUserMode(!isUserMode);
   }
 
@@ -39,9 +39,9 @@ function WebcamComponent({ mode }: Props) {
       return;
     }
 
-    const imageSrc = webcamRef.current.takePhoto();
+    const imageSrc = webcamRef.current?.takePhoto();
     animate(scope.current, { backgroundColor: ["rgba(0, 0, 0, 1)", "rgba(0, 0, 0, 0)"], transition: { duration: 0.1 } });
-    if (!imageSrc) return;
+    if (!imageSrc || typeof imageSrc !== "string") return;
     if (!imageUrls) return;
 
 

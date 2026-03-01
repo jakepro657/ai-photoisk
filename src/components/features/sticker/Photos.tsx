@@ -35,7 +35,7 @@ function Photos({ setResponseIdx, imageUrls, setSelections, selections, download
     }
   };
 
-  const flipAndDownload = (image: any) => {
+  const flipAndDownload = (image: string) => {
     if (!image) return;
 
     const canvas = document.createElement('canvas');
@@ -53,7 +53,7 @@ function Photos({ setResponseIdx, imageUrls, setSelections, selections, download
       if (filter) {
         ctx?.drawImage(img, 0, 0);
         const imageData = ctx?.getImageData(0, 0, img.width, img.height);
-        const grayscaleData = grayscaleFilter(imageData as any);
+        const grayscaleData = grayscaleFilter(imageData!);
         ctx?.putImageData(grayscaleData, 0, 0);
         const flippedDataUrl = canvas.toDataURL('image/png');
         const a = document.createElement('a');
@@ -83,7 +83,7 @@ function Photos({ setResponseIdx, imageUrls, setSelections, selections, download
     };
   };
 
-  function grayscaleFilter(pixels: any) {
+  function grayscaleFilter(pixels: ImageData) {
     var d = pixels.data; for (var i = 0; i < d.length; i += 4) {
       var r = d[i]; var g = d[i + 1]; var b = d[i + 2];
       var v = 0.2126 * r + 0.7152 * g + 0.0722 * b;

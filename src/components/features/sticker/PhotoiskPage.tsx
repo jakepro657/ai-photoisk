@@ -29,7 +29,7 @@ function PhotoiskPage({ }: Props) {
   const router = useRouter();
 
   const { imageUrls, filter, setFilter, isUserMode } = useCameraStore();
-  const [response, setResponse] = useState<any | null>([]);
+  const [response, setResponse] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -40,7 +40,7 @@ function PhotoiskPage({ }: Props) {
   const [clickedCount, setClickedCount] = useState(0);
   const [popup, setPopup] = useState(false);
 
-  const onClickToRegenerateImage = async (e: any) => {
+  const onClickToRegenerateImage = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const res = await fetch("/api/payLimit", {
@@ -65,7 +65,7 @@ function PhotoiskPage({ }: Props) {
     setClicked(false);
   };
 
-  const onClickToRetouchImage = async (e: any) => {
+  const onClickToRetouchImage = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const res = await fetch("/api/payLimit", {
@@ -119,7 +119,7 @@ function PhotoiskPage({ }: Props) {
 
       try {
         const data = await res.json();
-        setResponse((prev: any) => [...prev, data]);
+        setResponse((prev) => [...prev, data]);
       } catch (e) {
         toast.error(
           "이미지 생성에 실패했습니다. 새로고침 후 다시 시도해주세요."
@@ -129,7 +129,7 @@ function PhotoiskPage({ }: Props) {
     }
   };
 
-  const handleAdditionalDecoPrompt = (e: any) => {
+  const handleAdditionalDecoPrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAdditionalDecoPrompt(e.target.value);
   };
 
@@ -187,7 +187,7 @@ function PhotoiskPage({ }: Props) {
           <Photos
             download={true}
             imageUrls={
-              response?.map((res: any) => {
+              response?.map((res) => {
                 return `https://${process.env.NEXT_PUBLIC_STORAGE_DOMAIN}/${res}`;
               }) || null
             }

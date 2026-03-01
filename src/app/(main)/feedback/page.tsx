@@ -32,7 +32,7 @@ function Feedback({ }: Props) {
   const [poseDescription, setPoseDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onClickToGeneratePose = async (e: any) => {
+  const onClickToGeneratePose = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (!poseDescription) {
