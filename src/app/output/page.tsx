@@ -48,7 +48,7 @@ function Home({ }: Props) {
         setLoading(false);
       })
       .catch(() => {
-        console.log("Error");
+        console.error("Error");
         setUrl("");
         setLoading(false);
       });

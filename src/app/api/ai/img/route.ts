@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   // }
 
-  const user = await currentUser();
+  const _user = await currentUser();
 
   // if (!user) {
   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

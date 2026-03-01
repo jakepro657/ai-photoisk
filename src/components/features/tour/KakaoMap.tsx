@@ -1,6 +1,5 @@
 import { useGeo } from "@/hooks/useGeo";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import type { PlacePin } from "@/types";
 

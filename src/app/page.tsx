@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import WaveBackground from "@/components/common/WaveBackground";
 import TopNavbar from "@/components/layout/TopNavbar";
 import { useRouter } from "next/navigation";

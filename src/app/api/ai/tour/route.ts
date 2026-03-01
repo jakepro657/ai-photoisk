@@ -133,7 +133,6 @@ export async function POST(req: Request) {
         message: [],
       });
     }
-    console.log("data", data);
 
     let tour = null;
 
@@ -152,11 +151,9 @@ export async function POST(req: Request) {
       });
     }
 
-    console.log("tour", tour);
 
     const listForSort = tour?.concat(recommends || []) || recommends || [];
 
-    console.log("listForSort", listForSort);
 
     // 우선순위 결정 알고리즘
 
@@ -182,7 +179,6 @@ export async function POST(req: Request) {
       quaternaryList
     );
 
-    console.log("sortedList", sortedList);
 
     const handler = async (item: TourRecommendItem) => {
       const responseForOverview = await fetch(
@@ -216,7 +212,6 @@ export async function POST(req: Request) {
       promptForGPT.push(data);
     }
 
-    console.log("promptForGPT", promptForGPT);
 
     if (promptForGPT.length === 0) {
       return NextResponse.json({
@@ -249,13 +244,11 @@ export async function POST(req: Request) {
 
     const result = await generateText(userPrompt, systemPrompt);
 
-    console.log("result", result);
 
     const idx = parseInt(result);
 
     const ret = promptForGPT[idx] || promptForGPT[0];
 
-    console.log("ret", ret);
 
     const responseForImg = await fetch(
       `http://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=${process.env.TOUR_API_KEY}&MobileOS=AND&MobileApp=Photoisk&_type=json&numOfRows=10&pageNo=1&contentId=${ret.contentId}&imageYN=Y&subImageYN=Y`,
@@ -268,13 +261,11 @@ export async function POST(req: Request) {
     );
     const dataForImg = await responseForImg.json();
 
-    console.log("dataForImg", dataForImg);
 
     const url =
       dataForImg.response?.body.items.item[0].originimgurl ||
       dataForImg.response?.body.items.item[0].smallimageurl;
 
-    console.log("url", url);
 
     const pfr = await prisma.placeForRec.create({
       data: {

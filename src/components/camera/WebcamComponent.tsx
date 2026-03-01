@@ -4,7 +4,7 @@ import React, { useCallback, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useCameraStore } from "@/stores/camera-store";
 import { Camera, CameraType } from "react-camera-pro";
-import { motion, useAnimate } from "framer-motion";
+import { useAnimate } from "framer-motion";
 import Image from "next/image";
 
 type Props = {
@@ -20,7 +20,7 @@ const defaultErrorMessages = {
 }
 
 function WebcamComponent({ mode }: Props) {
-  const { imageUrls, setImageUrls, addImage, poseUrl, setIsUserMode, isUserMode } = useCameraStore();
+  const { imageUrls, addImage, poseUrl, setIsUserMode, isUserMode } = useCameraStore();
 
   const [scope, animate] = useAnimate();
 

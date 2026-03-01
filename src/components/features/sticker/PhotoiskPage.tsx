@@ -37,7 +37,7 @@ function PhotoiskPage({ }: Props) {
 
   const [responseIdx, setResponseIdx] = useState(0);
 
-  const [clickedCount, setClickedCount] = useState(0);
+  const [, setClickedCount] = useState(0);
   const [popup, setPopup] = useState(false);
 
   const onClickToRegenerateImage = async (e: React.MouseEvent<HTMLButtonElement>) => {

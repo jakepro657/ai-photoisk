@@ -1,13 +1,10 @@
 "use client";
-import { Loading } from "@/components/common/Loading";
 import Photos from "@/components/features/sticker/Photos";
 import { Button } from "@/components/ui/button";
 import CircleLoading from "@/components/common/CircleLoading";
 import WaveBackground from "@/components/common/WaveBackground";
 import WebcamComponent from "@/components/camera/WebcamComponent";
 import { useCameraStore } from "@/stores/camera-store";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import {
