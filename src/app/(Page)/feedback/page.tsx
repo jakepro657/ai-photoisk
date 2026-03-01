@@ -1,11 +1,11 @@
 "use client";
-import { Loading } from "@/components/Loading";
-import Photos from "@/components/Photos";
+import { Loading } from "@/components/common/Loading";
+import Photos from "@/components/features/sticker/Photos";
 import { Button } from "@/components/ui/button";
-import CircleLoading from "@/components/v2/loadings/CircleLoading";
-import WaveBackground from "@/components/WaveBackground";
-import WebcamComponent from "@/components/v2/cams/WebcamComponent";
-import WebcamProvider, { useWebcamContext } from "@/components/WebcamProvider";
+import CircleLoading from "@/components/common/CircleLoading";
+import WaveBackground from "@/components/common/WaveBackground";
+import WebcamComponent from "@/components/camera/WebcamComponent";
+import WebcamProvider, { useWebcamContext } from "@/components/camera/WebcamProvider";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";

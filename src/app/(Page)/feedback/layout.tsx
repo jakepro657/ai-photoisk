@@ -1,4 +1,4 @@
-import WebcamProvider from '@/components/WebcamProvider'
+import WebcamProvider from '@/components/camera/WebcamProvider'
 import React from 'react'
 
 type Props = {

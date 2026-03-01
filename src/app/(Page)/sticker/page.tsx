@@ -1,7 +1,7 @@
 "use client";
-import WebcamComponent from '@/components/v2/cams/WebcamComponent';
-import WebcamProvider from "@/components/WebcamProvider";
-import PhotoiskPage from "@/components/pages/PhotoiskPage";
+import WebcamComponent from '@/components/camera/WebcamComponent';
+import WebcamProvider from "@/components/camera/WebcamProvider";
+import PhotoiskPage from "@/components/features/sticker/PhotoiskPage";
 import React from "react";
 
 type Props = {};

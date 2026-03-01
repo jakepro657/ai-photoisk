@@ -8,8 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../ui/dialog";
-import { Button } from "../../../ui/button";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
@@ -17,7 +17,7 @@ import {
   useAuth,
   SignInButton
 } from '@clerk/nextjs'
-import CircleLoading from "../../../v2/loadings/CircleLoading";
+import CircleLoading from "@/components/common/CircleLoading";
 import { toast } from "react-hot-toast";
 import "./MainCard.css"
 

@@ -1,7 +1,6 @@
 "use client";
-import IconButton from "@/components/v2/buttons/IconButton";
-import BottomNavbar from "@/components/v2/nav/BottomNavbar";
-import WaveBackground from "@/components/WaveBackground";
+import IconButton from "@/components/common/IconButton";
+import BottomNavbar from "@/components/layout/BottomNavbar";
 import { paths } from "@/utils/data";
 import { EyeIcon, Image, MapPin, ScanFaceIcon, User2Icon } from "lucide-react";
 import Link from "next/link";

@@ -1,17 +1,12 @@
 "use client";
-import { Loading } from "@/components/Loading";
-import Logo from "@/components/Logo";
-import MainCard from "@/components/MainCard";
-import NavBar from "@/components/NavBar";
-import WaveBackground from "@/components/WaveBackground";
+import { Loading } from "@/components/common/Loading";
+import WaveBackground from "@/components/common/WaveBackground";
 import { Button } from "@/components/ui/button";
-import { Instagram, LinkIcon } from "lucide-react";
+import { Instagram } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-import TopNavbar from "@/components/v2/nav/TopNavbar";
+import TopNavbar from "@/components/layout/TopNavbar";
 
 type Props = {};
 

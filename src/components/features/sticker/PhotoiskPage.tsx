@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { useWebcamContext } from "../WebcamProvider";
-import { Button } from "../ui/button";
-import Photos from "../Photos";
-import WaveBackground from "../WaveBackground";
+import { useWebcamContext } from "@/components/camera/WebcamProvider";
+import { Button } from "@/components/ui/button";
+import Photos from "./Photos";
+import WaveBackground from "@/components/common/WaveBackground";
 import { useQRCode } from "next-qrcode";
 import { motion } from "framer-motion";
 import {
@@ -14,12 +14,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowBigDown, FilterIcon, LinkIcon } from "lucide-react";
 import { toast } from "react-hot-toast";
-import CircleLoading from "../v2/loadings/CircleLoading";
+import CircleLoading from "@/components/common/CircleLoading";
 
 type Props = {};
 // 밝은 조명에서 하면 더 잘 나옴, 정면 얼굴이 가장 잘 나옴

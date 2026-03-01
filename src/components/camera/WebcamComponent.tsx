@@ -1,9 +1,9 @@
 "use client";
-import { CameraIcon, SwitchCameraIcon } from "lucide-react";
+import { CameraIcon, FilterIcon, SwitchCameraIcon } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import Webcam from "react-webcam";
 import { useWebcamContext } from "./WebcamProvider";
+import { Camera } from "react-camera-pro";
 import { motion, useAnimate } from "framer-motion";
 import Image from "next/image";
 
@@ -11,23 +11,25 @@ type Props = {
   mode?: "general" | "pose";
 };
 
+const defaultErrorMessages = {
+  noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+  permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+  switchCamera:
+    'It is not possible to switch camera to different one because there is only one video device accessible.',
+  canvas: 'Canvas is not supported.'
+}
+
 function WebcamComponent({ mode }: Props) {
-  const { imageUrls, setImageUrls, poseUrl, setPoseUrl } = useWebcamContext();
-  const [mirrored, setMirrored] = useState(true);
-  const [videoConstraints, setVideoConstraints] = useState({
-    width: 1080,
-    height: 1920,
-    facingMode: "user",
-  });
+  const { imageUrls, setImageUrls, poseUrl, setIsUserMode, } = useWebcamContext();
+
   const [scope, animate] = useAnimate();
 
-  const webcamRef = useRef<Webcam>(null);
+  const webcamRef = useRef<any>(null);
 
-  const flipCamera = useCallback(() => {
-    const facingMode = videoConstraints.facingMode === "user" ? "environment" : "user";
-    setVideoConstraints((prev) => ({ ...prev, facingMode }));
-    setMirrored((prev) => !prev);
-  }, [videoConstraints, setVideoConstraints]);
+  const flipCamera = () => {
+    webcamRef.current.switchCamera()
+    setIsUserMode((prev: boolean) => !prev);
+  }
 
   // 웹캠 사진 캡쳐
   const capture = useCallback(() => {
@@ -37,7 +39,7 @@ function WebcamComponent({ mode }: Props) {
       return;
     }
 
-    const imageSrc = webcamRef.current?.getScreenshot();
+    const imageSrc = webcamRef.current.takePhoto();
     animate(scope.current, { backgroundColor: ["rgba(0, 0, 0, 1)", "rgba(0, 0, 0, 0)"], transition: { duration: 0.1 } });
     if (!imageSrc) return;
     if (!imageUrls) return;
@@ -54,16 +56,12 @@ function WebcamComponent({ mode }: Props) {
         className="absolute w-full h-full z-10"
       >
       </div>
-      <Webcam
-        className="aboslute z-20 pb-0 sm:pb-16 h-full aspect-portrait"
-        mirrored={mirrored}
-        audio={false}
-        width={1080}
-        height={1920}
-        ref={webcamRef}
-        screenshotFormat="image/png"
-        videoConstraints={videoConstraints}
-      />
+      <div className="z-1 w-full h-[calc(100vh-64px)] aspect-portrait">
+        <Camera
+          errorMessages={defaultErrorMessages}
+          ref={webcamRef}
+        />
+      </div>
       {mode === "pose" && (
         <>
           {poseUrl !== "" ?
@@ -85,7 +83,7 @@ function WebcamComponent({ mode }: Props) {
         <SwitchCameraIcon size={32} />
       </button>
       <button
-        className="absolute w-fit border-white border-4 z-30 bottom-24 left-0 right-0 mx-auto p-2 bg-gray-800 text-white rounded-full"
+        className="absolute w-fit border-white border-4 z-30 bottom-8 left-0 right-0 mx-auto p-2 bg-gray-800 text-white rounded-full"
         onClick={capture}
       >
         <CameraIcon size={32} />

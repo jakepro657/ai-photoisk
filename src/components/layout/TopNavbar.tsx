@@ -1,11 +1,11 @@
-import Logo from '@/components/Logo'
+import Logo from '@/components/common/Logo'
 import { Button } from '@/components/ui/button'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import { Instagram, LinkIcon, UserCircle2, UserCircle2Icon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import { toast } from 'react-hot-toast'
-import RowContainer from '../containers/RowContainer'
+import RowContainer from './containers/RowContainer'
 
 type Props = {}
 
