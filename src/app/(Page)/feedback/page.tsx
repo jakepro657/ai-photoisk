@@ -1,5 +1,4 @@
 "use client";
-import KakaoAdFit from "@/components/KakaoAdFit";
 import { Loading } from "@/components/Loading";
 import Photos from "@/components/Photos";
 import { Button } from "@/components/ui/button";
@@ -85,9 +84,6 @@ function Feedback({ }: Props) {
       <WebcamComponent mode="pose" />
       <WaveBackground />
       <div className="relative w-full h-full sm:w-[500px] bg-indigo-200 pb-16">
-        <div className="w-full flex justify-center my-4">
-          <KakaoAdFit />
-        </div>
         <div className="flex flex-col gap-8 justify-center items-center">
           <div className="pb-20 rounded-t-3xl shadow-[0px_-0.5px_gray] flex flex-col justify-center w-full h-full bg-white">
             <div className="text-start ml-[5%] text-md sm:text-xl font-PretendardBold pt-8 text-indigo-600">

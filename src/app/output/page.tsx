@@ -1,5 +1,4 @@
 "use client";
-// import KakaoAdFit from "@/components/KakaoAdFit";
 import { Loading } from "@/components/Loading";
 import Logo from "@/components/Logo";
 import MainCard from "@/components/MainCard";
@@ -13,7 +12,6 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import TopNavbar from "@/components/v2/nav/TopNavbar";
-import KakaoAdFit from "@/components/KakaoAdFit";
 
 type Props = {};
 
@@ -85,10 +83,7 @@ function Home({ }: Props) {
             className={`absolute flex-wrap w-full sm:w-[500px] left-1/2 -translate-x-1/2 h-full flex flex-col justify-center items-center gap-4 text-center bg-no-repeat`}
           >
             {showingImg ? (
-              <>
-                <KakaoAdFit />
-                <Image src={showingImg} alt="Image" width={128} height={256} />
-              </>
+              <Image src={showingImg} alt="Image" width={128} height={256} />
             ) : (
               <h1 className="text-3xl sm:text-6xl mt-auto font-TTHakgyoansimUndongjangL bg-gradient-to-r from-red-600 to-indigo-400 inline-block text-transparent bg-clip-text">
                 오류가 발생했습니다.

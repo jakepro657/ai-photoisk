@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowBigDown, FilterIcon, LinkIcon } from "lucide-react";
 import { toast } from "react-hot-toast";
-import KakaoAdFit from "../KakaoAdFit";
 import CircleLoading from "../v2/loadings/CircleLoading";
 
 type Props = {};
@@ -145,9 +144,6 @@ function PhotoiskPage({ }: Props) {
     <>
       <WaveBackground />
       <div className="relative w-full h-full sm:w-[500px] bg-indigo-200 pb-16">
-        <div className="w-full flex justify-center my-4">
-          <KakaoAdFit />
-        </div>
         <div className="flex flex-col pb-16 rounded-t-3xl bg-white shadow-[0px_-0.5px_gray]">
           <div className="text-start ml-[5%] text-md sm:text-xl font-PretendardBold pt-8 text-indigo-600">
             AI 사진 변환

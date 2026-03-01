@@ -20,7 +20,7 @@ const data = [
   },
   {
     icon: <Image size={24} />,
-    label: "웹툰 메이커",
+    label: "나의 활동",
     pathname: "/main",
   },
   {
