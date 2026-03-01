@@ -1,4 +1,3 @@
-import WebcamProvider from '@/components/camera/WebcamProvider'
 import React from 'react'
 
 type Props = {
@@ -7,9 +6,9 @@ type Props = {
 
 const FeedbackLayout = ({ children }: Props) => {
   return (
-    <WebcamProvider>
+    <>
         {children}
-    </WebcamProvider>
+    </>
   )
 }
 

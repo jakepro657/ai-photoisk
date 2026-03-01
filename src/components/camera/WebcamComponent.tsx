@@ -1,8 +1,8 @@
 "use client";
-import { CameraIcon, FilterIcon, SwitchCameraIcon } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { CameraIcon, SwitchCameraIcon } from "lucide-react";
+import React, { useCallback, useRef } from "react";
 import { toast } from "react-hot-toast";
-import { useWebcamContext } from "./WebcamProvider";
+import { useCameraStore } from "@/stores/camera-store";
 import { Camera } from "react-camera-pro";
 import { motion, useAnimate } from "framer-motion";
 import Image from "next/image";
@@ -20,7 +20,7 @@ const defaultErrorMessages = {
 }
 
 function WebcamComponent({ mode }: Props) {
-  const { imageUrls, setImageUrls, poseUrl, setIsUserMode, } = useWebcamContext();
+  const { imageUrls, setImageUrls, addImage, poseUrl, setIsUserMode, isUserMode } = useCameraStore();
 
   const [scope, animate] = useAnimate();
 
@@ -28,7 +28,7 @@ function WebcamComponent({ mode }: Props) {
 
   const flipCamera = () => {
     webcamRef.current.switchCamera()
-    setIsUserMode((prev: boolean) => !prev);
+    setIsUserMode(!isUserMode);
   }
 
   // 웹캠 사진 캡쳐
@@ -45,8 +45,8 @@ function WebcamComponent({ mode }: Props) {
     if (!imageUrls) return;
 
 
-    setImageUrls((prev: any) => [...prev, imageSrc]);
-  }, [imageUrls, setImageUrls]);
+    addImage(imageSrc);
+  }, [imageUrls, addImage]);
 
 
   return (

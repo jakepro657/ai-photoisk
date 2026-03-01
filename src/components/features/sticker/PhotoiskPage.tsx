@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useWebcamContext } from "@/components/camera/WebcamProvider";
+import { useCameraStore } from "@/stores/camera-store";
 import { Button } from "@/components/ui/button";
 import Photos from "./Photos";
 import WaveBackground from "@/components/common/WaveBackground";
@@ -28,7 +28,7 @@ function PhotoiskPage({ }: Props) {
 
   const router = useRouter();
 
-  const { imageUrls, filter, setFilter, isUserMode } = useWebcamContext();
+  const { imageUrls, filter, setFilter, isUserMode } = useCameraStore();
   const [response, setResponse] = useState<any | null>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -166,7 +166,7 @@ function PhotoiskPage({ }: Props) {
             filter={filter}
           />
           <button className="absolute w-fit border-white border-4 z-30 top-80 right-8 p-2 bg-gray-800 rounded-full"
-            onClick={() => setFilter((prev: boolean) => !prev)}
+            onClick={() => setFilter(!filter)}
           >
             {filter ? <FilterIcon size={16} color="red" /> : <FilterIcon size={16} color="white" />}
           </button>

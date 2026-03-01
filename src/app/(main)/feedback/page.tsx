@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import CircleLoading from "@/components/common/CircleLoading";
 import WaveBackground from "@/components/common/WaveBackground";
 import WebcamComponent from "@/components/camera/WebcamComponent";
-import WebcamProvider, { useWebcamContext } from "@/components/camera/WebcamProvider";
+import { useCameraStore } from "@/stores/camera-store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -24,7 +24,7 @@ import { FilterIcon } from "lucide-react";
 type Props = {};
 
 function Feedback({ }: Props) {
-  const { imageUrls, setPoseUrl, isUserMode, filter, setFilter } = useWebcamContext();
+  const { imageUrls, setPoseUrl, isUserMode, filter, setFilter } = useCameraStore();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [popup, setPopup] = useState<boolean>(false);
 
@@ -107,7 +107,7 @@ function Feedback({ }: Props) {
               download={true}
             />
             <button className="absolute w-fit border-white border-4 z-30 top-80 right-8 p-2 bg-gray-800 rounded-full"
-              onClick={() => setFilter((prev: boolean) => !prev)}
+              onClick={() => setFilter(!filter)}
             >
               {filter ? <FilterIcon size={16} color="red" /> : <FilterIcon size={16} color="white" />}
             </button>
