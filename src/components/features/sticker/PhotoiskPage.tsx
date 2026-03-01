@@ -4,8 +4,6 @@ import { useCameraStore } from "@/stores/camera-store";
 import { Button } from "@/components/ui/button";
 import Photos from "./Photos";
 import WaveBackground from "@/components/common/WaveBackground";
-import { useQRCode } from "next-qrcode";
-import { motion } from "framer-motion";
 import {
   Dialog,
   DialogClose,
@@ -15,19 +13,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowBigDown, FilterIcon, LinkIcon } from "lucide-react";
+import { FilterIcon, LinkIcon } from "lucide-react";
 import { toast } from "react-hot-toast";
 import CircleLoading from "@/components/common/CircleLoading";
 
 type Props = {};
 // 밝은 조명에서 하면 더 잘 나옴, 정면 얼굴이 가장 잘 나옴
 function PhotoiskPage({ }: Props) {
-  const { Canvas } = useQRCode();
-
-  const router = useRouter();
-
   const { imageUrls, filter, setFilter, isUserMode } = useCameraStore();
   const [response, setResponse] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
@@ -140,6 +133,23 @@ function PhotoiskPage({ }: Props) {
     toast.success("공유링크가 복사되었습니다");
   };
 
+  const shareToInstagram = async () => {
+    const shareUrl = `https://photoisk.com/output?image=${response?.[responseIdx]}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "AI 사진",
+          url: shareUrl,
+        });
+      } catch {
+        toast.error("공유에 실패했습니다");
+      }
+    } else {
+      navigator.clipboard.writeText(shareUrl);
+      toast.success("공유링크가 복사되었습니다. 인스타그램에 붙여넣기 해주세요.");
+    }
+  };
+
   return (
     <>
       <WaveBackground />
@@ -154,9 +164,12 @@ function PhotoiskPage({ }: Props) {
           <textarea
             value={additionalDecoPrompt}
             onChange={handleAdditionalDecoPrompt}
-            placeholder="꾸미고 싶은 요소를 추가해보세요"
+            placeholder="예: 꽃무늬 배경, 파란 모자 착용"
             className="mx-auto w-[90%] h-32 p-4 border-2 font-PretendardRegular border-gray-300 rounded-md resize-none"
           ></textarea>
+          <div className="text-start ml-[5%] text-sm font-PretendardBold pt-4 pb-1 text-gray-600">
+            촬영한 사진
+          </div>
           <Photos
             isUserMode={isUserMode}
             download={false}
@@ -171,19 +184,14 @@ function PhotoiskPage({ }: Props) {
             {filter ? <FilterIcon size={16} color="red" /> : <FilterIcon size={16} color="white" />}
           </button>
 
-          {selectedImages?.length > 0 && response?.length == 0 && (
-            <div className="text-center text-md sm:text-xl font-PretendardMedium pt-8 flex flex-col items-center justify-center">
-              <div>페이지 끝에 있는 이미지 생성 버튼을 눌러주세요!</div>
-              <motion.div
-                animate={{ y: [0, 2.5, 0, -2.5, 0] }}
-                transition={{ duration: 1, repeat: Infinity }}
-                className="text-center text-md sm:text-xl font-PretendardBold py-4"
-              >
-                <ArrowBigDown size={32} />
-              </motion.div>
-            </div>
+          {response && response.length > 0 && (
+            <>
+              <div className="mx-[5%] my-4 border-t border-gray-200" />
+              <div className="text-start ml-[5%] text-sm font-PretendardBold pb-1 text-gray-600">
+                생성된 AI 사진
+              </div>
+            </>
           )}
-
           <Photos
             download={true}
             imageUrls={
@@ -215,29 +223,26 @@ function PhotoiskPage({ }: Props) {
                 </DialogTrigger>
                 <DialogContent className="font-PretendardBold sm:max-w-md">
                   <DialogHeader>
-                    <DialogTitle>인스타로 공유하기</DialogTitle>
+                    <DialogTitle>공유하기</DialogTitle>
                   </DialogHeader>
-                  <div className="flex justify-center items-center space-x-2">
-                    <Canvas
-                      text={`https://photoisk.com/output?image=${response?.[responseIdx]}`}
-                      options={{
-                        errorCorrectionLevel: "M",
-                        margin: 3,
-                        scale: 4,
-                        width: 200,
-                      }}
-                    />
-                  </div>
-                  <DialogFooter className="flex gap-3 items-center justify-center">
-                    <DialogClose
-                      onClick={() => router.replace("/")}
-                      className="font-PretendardMedium bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-[90%] mx-auto rounded-md"
+                  <DialogFooter className="flex flex-col gap-3 items-center justify-center">
+                    <Button
+                      onClick={copyUrl}
+                      className="w-[90%] mx-auto"
+                      variant="outline"
                     >
-                      끝내기
-                    </DialogClose>
-                    <Button variant="ghost" onClick={copyUrl}>
-                      <LinkIcon size={24} />
+                      <LinkIcon size={20} className="mr-2" />
+                      링크 복사
                     </Button>
+                    <Button
+                      onClick={shareToInstagram}
+                      className="w-[90%] mx-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                    >
+                      인스타그램 공유
+                    </Button>
+                    <DialogClose className="font-PretendardMedium bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-[90%] mx-auto rounded-md">
+                      닫기
+                    </DialogClose>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -276,7 +281,7 @@ function PhotoiskPage({ }: Props) {
               <Button
                 disabled={clicked}
                 onClick={onClickToRetouchImage}
-                className="absolute left-1/2 -translate-x-1/2 bottom-4 w-[90%] sm:w-[432px]"
+                className="absolute left-1/2 -translate-x-1/2 bottom-4 w-[90%] sm:w-[432px] bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-lg rounded-xl py-3"
               >
                 이미지 생성
               </Button>

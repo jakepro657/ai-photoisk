@@ -113,16 +113,13 @@ function Photos({ setResponseIdx, imageUrls, setSelections, selections, download
         >
           {/* className={`rounded-xl shadow-md`} ${isUserMode ? "scale-x-[-1]" : ""} */}
           <ImageComponent
-            className={`rounded-xl shadow-md ${isUserMode ? "scale-x-[-1]" : ""} ${filter ? "grayscale" : ""}`}
+            className={`rounded-xl shadow-md aspect-square object-cover ${isUserMode ? "scale-x-[-1]" : ""} ${filter ? "grayscale" : ""}`}
             src={`${url}`}
             width={500}
             height={500}
             alt={`webcam-${index}`}
           />
         </button>
-      ))}
-      {imageUrls && [...Array(5 - imageUrls.length)].map((_, index) => (
-        <div key={index} className="w-full sm:w-[88px] h-30 bg-gray-200 rounded-xl shadow-md"></div>
       ))}
     </div>
   );
