@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
-import OpenAI from "openai";
 import { currentUser, auth } from "@clerk/nextjs/server";
-
-const openai = new OpenAI();
+import { generateText } from "@/lib/ai";
 
 // A01 - 자연
 // A02 - 인문(문화/예술/역사)
@@ -219,19 +217,14 @@ export async function POST(req: Request) {
       });
     }
 
-    const responseGPT = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `
-  
+    const systemPrompt = `
+
           <context>
             You are required to recommend ONLY ONE place to the user.
-            !IMPORTANT: THE RECOMMENDATION SHOULD BE BASED ON THE GIVEN DATA. 
+            !IMPORTANT: THE RECOMMENDATION SHOULD BE BASED ON THE GIVEN DATA.
             !MOST IMPORTANT: ONLY ONE NUMBER SHOULD BE RETURNED AS THE RESULT.
           </context>
-              
+
           <instruction>
             The recommendation should depend on the following rules:
               1. Advertisement should be recommended first.
@@ -240,53 +233,14 @@ export async function POST(req: Request) {
 
             With the input data, you should give the index of the place you want to recommend.
           </instruction>
-          `,
-        },
-        {
-          role: "user",
-          content: `
+          `;
+
+    const userPrompt = `
             DATA_LENGTH: ${promptForGPT.length}
             INPUT: ${promptForGPT.join("\n")}
-          `,
-        },
-      ],
-      // tools: [
-      //   {
-      //     type: "function",
-      //     function: {
-      //       name: "recommendationForTouristAttractions",
-      //       parameters: {
-      //         type: "object",
-      //         properties: {
-      //           isHotplace: {
-      //             type: "boolean",
-      //           },
-      //           isAdvertisement: {
-      //             type: "boolean",
-      //           },
-      //           title: {
-      //             type: "string",
-      //           },
-      //           description: {
-      //             type: "string",
-      //           },
-      //           contentTypeId: {
-      //             type: "number",
-      //           },
-      //           x: {
-      //             type: "number",
-      //           },
-      //           y: {
-      //             type: "number",
-      //           },
-      //         },
-      //       },
-      //     },
-      //   },
-      // ],
-    });
+          `;
 
-    const result = responseGPT.choices[0].message.content as string;
+    const result = await generateText(userPrompt, systemPrompt);
 
     console.log("result", result);
 

@@ -1,8 +1,6 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
-
-const openai = new OpenAI();
+import { analyzeImage } from "@/lib/ai";
 
 export async function POST(req: Request) {
   const img = await req.blob();
@@ -13,12 +11,7 @@ export async function POST(req: Request) {
     access: "public",
   });
 
-  const evalResponse = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content: `
+  const systemPrompt = `
                 <context>
                     You are given an image to evaluate.
                     To improve user's photo taking experience, please provide feedback on the image.
@@ -28,11 +21,11 @@ export async function POST(req: Request) {
                 </context>
 
                 <instruction>
-                    Evaluate and describe the image with following criteria: 
+                    Evaluate and describe the image with following criteria:
                     - Body posture
                     - Facial expression
                     - Background
-                    
+
                     example:
                         Good:
                         - Body posture: The user is standing straight...(skip)
@@ -49,23 +42,13 @@ export async function POST(req: Request) {
                         - The user should smile...(skip)
                         - The background should be blurred...(skip)
                 </instruction>
-                `,
-      },
-      {
-        role: "user",
-        content: [
-          {
-            type: "image_url",
-            image_url: {
-              url: url,
-            },
-          },
-        ],
-      },
-    ],
-  });
+                `;
 
-  const outputContent = evalResponse.choices[0].message.content as string;
+  const outputContent = await analyzeImage(
+    url,
+    "Evaluate and provide feedback on this image.",
+    systemPrompt
+  );
 
   return NextResponse.json({
     message: outputContent,
