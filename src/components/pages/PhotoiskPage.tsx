@@ -43,7 +43,7 @@ function PhotoiskPage({ }: Props) {
   const onClickToRegenerateImage = async (e: any) => {
     e.preventDefault();
 
-    const res = await fetch("/api/v2/payLimit", {
+    const res = await fetch("/api/payLimit", {
       method: "GET",
     });
 
@@ -68,7 +68,7 @@ function PhotoiskPage({ }: Props) {
   const onClickToRetouchImage = async (e: any) => {
     e.preventDefault();
 
-    const res = await fetch("/api/v2/payLimit", {
+    const res = await fetch("/api/payLimit", {
       method: "GET",
     });
 
@@ -101,7 +101,7 @@ function PhotoiskPage({ }: Props) {
 
   const generateImage = async () => {
     for (const image of selectedImages) {
-      const res = await fetch("/api/sticker", {
+      const res = await fetch("/api/ai/sticker", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -21,7 +21,7 @@ const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: num
 
   useEffect(() => {
     async function loadPins() {
-      const response = await fetch("/api/v2/tour");
+      const response = await fetch("/api/ai/tour");
       const res = await response.json();
       setPins(res.message);
       setIsOpen(new Array(res.message.length).fill(false));
@@ -37,7 +37,7 @@ const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: num
   }, [location]);
 
   const handleMarkerClick = async (id: number, index: number) => {
-    const res = await fetch("/api/v2/tour", {
+    const res = await fetch("/api/ai/tour", {
       method: "POST",
       body: JSON.stringify({
         index: id,

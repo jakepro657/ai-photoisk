@@ -41,7 +41,7 @@ function Feedback({ }: Props) {
     }
 
     try {
-      const res = await fetch("/api/v2/payLimit", {
+      const res = await fetch("/api/payLimit", {
         method: "GET",
       });
 
@@ -56,7 +56,7 @@ function Feedback({ }: Props) {
       }
 
       setLoading(true);
-      const image = await fetch("/api/v2/ai/img", {
+      const image = await fetch("/api/ai/img", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
