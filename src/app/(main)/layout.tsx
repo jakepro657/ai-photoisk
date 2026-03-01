@@ -2,7 +2,7 @@
 import IconButton from "@/components/common/IconButton";
 import BottomNavbar from "@/components/layout/BottomNavbar";
 import { paths } from "@/utils/data";
-import { EyeIcon, MapPin, ScanFaceIcon } from "lucide-react";
+import { EyeIcon, MapPin, ScanFaceIcon, User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -26,6 +26,11 @@ const data = [
     icon: <MapPin size={24} />,
     label: "투어 추천",
     pathname: "/tour",
+  },
+  {
+    icon: <User2 size={24} />,
+    label: "마이",
+    pathname: "/my",
   },
 ];
 

@@ -1,27 +1,50 @@
-import React from "react";
+"use client";
 
-function MyPage() {
+import { useUser } from "@clerk/nextjs";
+import CircleLoading from "@/components/common/CircleLoading";
+
+export default function MyPage() {
+  const { user, isLoaded } = useUser();
+
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <CircleLoading />
+      </div>
+    );
+  }
+
   return (
-    <div className="z-10 flex flex-col flex-1 justify-start items-center w-full bg-white gap-4 p-6">
-      <h1 className="text-2xl font-PretendardBold text-gray-800 mt-4">
-        마이페이지
-      </h1>
-      <p className="text-sm font-PretendardRegular text-gray-500 text-center">
-        사용자 정보 및 활동 내역을 확인할 수 있습니다.
-      </p>
-      {/* TODO: User info, photo history, settings */}
-      <div className="w-full mt-6 space-y-4">
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h2 className="text-lg font-PretendardBold text-gray-700">내 정보</h2>
-          <p className="text-sm text-gray-400 mt-1">로그인 후 확인할 수 있습니다</p>
+    <div className="flex flex-col w-full h-full px-4 pt-4 gap-4">
+      {/* User profile section */}
+      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+        {user?.imageUrl && (
+          <img
+            src={user.imageUrl}
+            alt="프로필"
+            className="w-14 h-14 rounded-full"
+          />
+        )}
+        <div>
+          <p className="font-semibold text-lg">
+            {user?.firstName ||
+              user?.emailAddresses?.[0]?.emailAddress ||
+              "사용자"}
+          </p>
+          <p className="text-sm text-gray-500">
+            {user?.emailAddresses?.[0]?.emailAddress}
+          </p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h2 className="text-lg font-PretendardBold text-gray-700">활동 내역</h2>
-          <p className="text-sm text-gray-400 mt-1">AI 사진 변환 기록이 여기에 표시됩니다</p>
+      </div>
+
+      {/* Activity history section */}
+      <div>
+        <h2 className="text-lg font-semibold mb-3">활동 내역</h2>
+        <div className="bg-gray-50 rounded-xl p-6 text-center text-gray-400">
+          <p>아직 활동 내역이 없습니다</p>
+          <p className="text-sm mt-1">사진을 변환해보세요!</p>
         </div>
       </div>
     </div>
   );
 }
-
-export default MyPage

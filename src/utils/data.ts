@@ -11,4 +11,8 @@ export const paths = [
     label: "투어 추천",
     pathname: "/tour",
   },
+  {
+    label: "마이",
+    pathname: "/my",
+  },
 ];
