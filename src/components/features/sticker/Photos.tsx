@@ -113,11 +113,10 @@ function Photos({ setResponseIdx, imageUrls, setSelections, selections, download
         >
           {/* className={`rounded-xl shadow-md`} ${isUserMode ? "scale-x-[-1]" : ""} */}
           <ImageComponent
-            className={`rounded-xl shadow-md ${isUserMode ? "scale-x-[-1]" : ""}`}
+            className={`rounded-xl shadow-md ${isUserMode ? "scale-x-[-1]" : ""} ${filter ? "grayscale" : ""}`}
             src={`${url}`}
             width={500}
             height={500}
-            style={{ filter: filter ? "grayscale(100%)" : "", WebkitFilter: filter ? "grayscale(100%)" : "" }}
             alt={`webcam-${index}`}
           />
         </button>

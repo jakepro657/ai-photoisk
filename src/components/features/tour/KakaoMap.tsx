@@ -80,7 +80,7 @@ const KakaoMap = ({ position, setPosition }: { position: { lat: number; lng: num
         <>
           <MapMarker clickable={true} onClick={() => handleMarkerClick(pin.id, index)} title={pin.title} key={index} position={{ lat: pin.y, lng: pin.x }}>
             {isOpen && isOpen[index] && (
-              <div style={{ backgroundColor: "white", padding: "8px", borderRadius: "10px" }}>
+              <div className="bg-white p-2 rounded-[10px]">
                 <h3>장소 이름: {pin.title}</h3>
                 <p>장소 설명: {pin.description}</p>
                 <p>추천수: {pinRecCount}</p>
