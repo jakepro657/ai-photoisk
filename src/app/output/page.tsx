@@ -1,19 +1,12 @@
 "use client";
-// import KakaoAdFit from "@/components/KakaoAdFit";
-import { Loading } from "@/components/Loading";
-import Logo from "@/components/Logo";
-import MainCard from "@/components/MainCard";
-import NavBar from "@/components/NavBar";
-import WaveBackground from "@/components/WaveBackground";
+import CircleLoading from "@/components/common/CircleLoading";
+import WaveBackground from "@/components/common/WaveBackground";
 import { Button } from "@/components/ui/button";
-import { Instagram, LinkIcon } from "lucide-react";
+import { Instagram } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-import TopNavbar from "@/components/v2/nav/TopNavbar";
-import KakaoAdFit from "@/components/KakaoAdFit";
+import TopNavbar from "@/components/layout/TopNavbar";
 
 type Props = {};
 
@@ -23,7 +16,7 @@ function Home({ }: Props) {
   const [loading, setLoading] = useState(true);
   const [url, setUrl] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [showingImg, setShowingImg] = useState<any>(null);
+  const [showingImg, setShowingImg] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     setTimeout(() => {
@@ -47,8 +40,7 @@ function Home({ }: Props) {
     })
       .then((res) => res.blob())
       .then((data) => {
-        const tmp = data as any
-        const shareData = new File([tmp], "image.png", {
+        const shareData = new File([data], "image.png", {
           type: "image/png",
         });
         setFile(shareData);
@@ -56,7 +48,7 @@ function Home({ }: Props) {
         setLoading(false);
       })
       .catch(() => {
-        console.log("Error");
+        console.error("Error");
         setUrl("");
         setLoading(false);
       });
@@ -67,7 +59,7 @@ function Home({ }: Props) {
     return (
       <div className="w-full h-full py-6 px-10">
         <div className="flex items-center justify-center w-full h-full">
-          <Loading />
+          <CircleLoading />
         </div>
       </div>
     );
@@ -85,10 +77,7 @@ function Home({ }: Props) {
             className={`absolute flex-wrap w-full sm:w-[500px] left-1/2 -translate-x-1/2 h-full flex flex-col justify-center items-center gap-4 text-center bg-no-repeat`}
           >
             {showingImg ? (
-              <>
-                <KakaoAdFit />
-                <Image src={showingImg} alt="Image" width={128} height={256} />
-              </>
+              <Image src={showingImg} alt="Image" width={128} height={256} />
             ) : (
               <h1 className="text-3xl sm:text-6xl mt-auto font-TTHakgyoansimUndongjangL bg-gradient-to-r from-red-600 to-indigo-400 inline-block text-transparent bg-clip-text">
                 오류가 발생했습니다.
@@ -97,7 +86,7 @@ function Home({ }: Props) {
             <Button
               onClick={() =>
                 navigator.share({
-                  files: [file as any],
+                  files: [file!],
                   title: "숭실대 SSCC & PHOTOisk",
                   text: "PHOTOisk에서 나만의 AI사진을 만들어보세요!",
                 })

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { currentUser, auth } from "@clerk/nextjs/server";
-import prisma from "@/utils/prisma";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   // Get the userId from auth() -- if null, the user is not signed in
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -26,7 +26,6 @@ export async function GET() {
       data: {
         email: user?.emailAddresses[0]?.emailAddress!,
         name: user?.fullName!,
-        password: "",
         paymentsCount: 5,
       },
     });

@@ -1,11 +1,10 @@
 "use client";
-import { useLayoutEffect, useState } from "react";
-import WaveBackground from "@/components/WaveBackground";
-import TopNavbar from "@/components/v2/nav/TopNavbar";
+import { useLayoutEffect } from "react";
+import WaveBackground from "@/components/common/WaveBackground";
+import TopNavbar from "@/components/layout/TopNavbar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-// import MainCard from "@/components/MainCard";
-import MainCard from "@/components/v3/pages/home/MainCard";
+import MainCard from "@/components/features/home/MainCard";
 
 
 export default function Home() {
@@ -13,7 +12,7 @@ export default function Home() {
   const router = useRouter();
 
   useLayoutEffect(() => {
-    router.prefetch("/main");
+    router.prefetch("/sticker");
   }, []);
 
   return (
