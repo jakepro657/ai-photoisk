@@ -1,5 +1,22 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+// Paddle 결제 - 임시 비활성화
+// TODO: 결제 시스템 재활성화 시 복원
+
 import { NextResponse } from "next/server";
+
+// 결제 시스템 비활성화 중 - 항상 available: true 반환
+export async function GET() {
+  return NextResponse.json({ available: true }, { status: 200 });
+}
+
+// 결제 시스템 비활성화 중 - 아무 동작 없이 성공 응답
+export async function POST() {
+  return NextResponse.json({ available: true }, { status: 200 });
+}
+
+/*
+// --- 원본 코드 (결제 시스템 재활성화 시 복원) ---
+
+import { auth, currentUser } from "@clerk/nextjs/server";
 import prisma from "@/utils/prisma";
 
 export async function GET() {
@@ -73,3 +90,4 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ available: true }, { status: 200 });
 }
+*/
