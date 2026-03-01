@@ -1,6 +1,4 @@
 import React from 'react'
-import "./button.css"
-
 type Props = {
   label?: string
   size: "sm" | "md" | "lg"
@@ -12,14 +10,14 @@ type Props = {
 }
 
 const buttonStyle = {
-  'sm': "button_icon-sm",
-  'md': "button_icon-md",
-  'lg': "button_icon-lg",
+  'sm': "py-2 px-4 text-sm",
+  'md': "py-3 px-6 text-base",
+  'lg': "py-4 px-8 text-xl",
 }
 
 const iconStyle = {
-  'row': "button_icon-row",
-  'column': "button_icon-col",
+  'row': "flex items-center justify-center",
+  'column': "flex flex-col items-center justify-center gap-1",
 }
 
 function IconButton({ label, size, onClick, disabled, direction, icon, className }: Props) {

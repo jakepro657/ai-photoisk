@@ -1,5 +1,5 @@
 "use client";
-import { Loading } from "@/components/common/Loading";
+import CircleLoading from "@/components/common/CircleLoading";
 import WaveBackground from "@/components/common/WaveBackground";
 import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
@@ -59,7 +59,7 @@ function Home({ }: Props) {
     return (
       <div className="w-full h-full py-6 px-10">
         <div className="flex items-center justify-center w-full h-full">
-          <Loading />
+          <CircleLoading />
         </div>
       </div>
     );
