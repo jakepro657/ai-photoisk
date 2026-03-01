@@ -36,7 +36,6 @@ model Generated {
 
 model User {
   id            Int      @id @default(autoincrement())
-  password      String
   email         String   @unique
   name          String
   paymentsCount Int
@@ -80,24 +79,4 @@ model Diary {
   result        String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-}
-
-model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  userId    Int
-  diaryId   Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Episode {
-  id        Int      @id @default(autoincrement())
-  title     String?
-  content   String?
-  userId    Int
-  urls      String[]
-  contents  String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

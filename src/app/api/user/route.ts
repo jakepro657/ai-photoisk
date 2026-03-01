@@ -26,7 +26,6 @@ export async function GET() {
       data: {
         email: user?.emailAddresses[0]?.emailAddress!,
         name: user?.fullName!,
-        password: "",
         paymentsCount: 5,
       },
     });
