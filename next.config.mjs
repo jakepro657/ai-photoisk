@@ -11,8 +11,26 @@ const withSerwist = withSerwistInit({
 
 const nextConfig = {
   reactStrictMode: false,
+  // TypeScript checking is done via `yarn pnpify tsc --noEmit` instead,
+  // because Next.js build worker doesn't support Yarn PnP resolution for internal types
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
-    domains: ['b22wobhlmya1ixv3.public.blob.vercel-storage.com', "oaidalleapiprodscus.blob.core.windows.net", "tong.visitkorea.or.kr"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "b22wobhlmya1ixv3.public.blob.vercel-storage.com",
+      },
+      {
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+      },
+      {
+        protocol: "https",
+        hostname: "tong.visitkorea.or.kr",
+      },
+    ],
   },
 };
 

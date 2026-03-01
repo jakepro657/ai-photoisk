@@ -1,6 +1,6 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/utils/prisma";
 
 export async function POST(req: Request) {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
-import { currentUser, auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { generateText } from "@/lib/ai";
 
 // A01 - 자연
