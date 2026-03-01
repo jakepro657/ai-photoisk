@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { currentUser, auth } from "@clerk/nextjs/server";
-import prisma from "@/utils/prisma";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   // Get the userId from auth() -- if null, the user is not signed in

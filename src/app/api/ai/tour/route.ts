@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "@/utils/prisma";
+import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { generateText } from "@/lib/ai";
 import type {

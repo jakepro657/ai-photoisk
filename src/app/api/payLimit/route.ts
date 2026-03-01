@@ -17,7 +17,7 @@ export async function POST() {
 // --- 원본 코드 (결제 시스템 재활성화 시 복원) ---
 
 import { auth, currentUser } from "@clerk/nextjs/server";
-import prisma from "@/utils/prisma";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   const { userId } = auth();

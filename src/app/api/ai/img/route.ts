@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { generateImage } from "@/lib/ai";
 // TODO: 결제 시스템 재활성화 시 복원
 // import { auth } from "@clerk/nextjs/server";
-// import prisma from "@/utils/prisma";
+// import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
   // const { userId } = auth();
