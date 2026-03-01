@@ -2,7 +2,7 @@
 import IconButton from "@/components/common/IconButton";
 import BottomNavbar from "@/components/layout/BottomNavbar";
 import { paths } from "@/utils/data";
-import { EyeIcon, Image, MapPin, ScanFaceIcon, User2Icon } from "lucide-react";
+import { EyeIcon, MapPin, ScanFaceIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -18,14 +18,14 @@ const data = [
     pathname: "/sticker",
   },
   {
-    icon: <Image size={24} />,
-    label: "나의 활동",
-    pathname: "/main",
-  },
-  {
     icon: <EyeIcon size={24} />,
     label: "포즈 가이드",
     pathname: "/feedback",
+  },
+  {
+    icon: <MapPin size={24} />,
+    label: "투어 추천",
+    pathname: "/tour",
   },
 ];
 

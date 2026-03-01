@@ -31,7 +31,7 @@ function MainCard({ }: Props) {
   const { signOut } = useAuth();
 
   const onClickToMain = () => {
-    router.push("/main");
+    router.push("/sticker");
   };
 
   useEffect(() => {

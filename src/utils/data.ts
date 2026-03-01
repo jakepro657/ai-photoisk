@@ -4,11 +4,11 @@ export const paths = [
     pathname: "/sticker",
   },
   {
-    label: "나의 활동",
-    pathname: "/main",
-  },
-  {
     label: "포즈 가이드",
     pathname: "/feedback",
+  },
+  {
+    label: "투어 추천",
+    pathname: "/tour",
   },
 ];

@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
 
   useLayoutEffect(() => {
-    router.prefetch("/main");
+    router.prefetch("/sticker");
   }, []);
 
   return (
