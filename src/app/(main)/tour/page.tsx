@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-// import useKakaoLoader from "@/hooks/useKakaoLoader";
+import useKakaoLoader from "@/hooks/useKakaoLoader";
 import KakaoMap from "@/components/features/tour/KakaoMap";
 
 export default function TourPage() {
 
-  // TODO: 카카오맵 로딩 오류 해결 후 주석 해제
-  // useKakaoLoader();
+  useKakaoLoader();
   const [position, setPosition] = useState<{
     lat: number;
     lng: number;

@@ -1,5 +1,5 @@
 
-const useKakaoLoaderOrigin = require("react-kakao-maps").useKakaoLoader
+const useKakaoLoaderOrigin = require("react-kakao-maps-sdk").useKakaoLoader
 
 export default function useKakaoLoader() {
   useKakaoLoaderOrigin({
