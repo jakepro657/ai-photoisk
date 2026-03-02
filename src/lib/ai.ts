@@ -1,12 +1,16 @@
 import { GoogleGenAI } from "@google/genai";
 import { put } from "@vercel/blob";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+let _ai: GoogleGenAI | null = null;
+function getAi() {
+  if (!_ai) {
+    _ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+  }
+  return _ai;
+}
 
-const TEXT_MODEL = "gemini-2.5-flash-preview-05-20";
-const IMAGE_MODEL = "gemini-2.0-flash-preview-image-generation";
+const TEXT_MODEL = "gemini-3-flash-preview";
+const IMAGE_MODEL = "gemini-3.1-flash-image-preview";
 
 /**
  * 이미지를 분석하여 텍스트 결과를 반환한다.
@@ -37,7 +41,7 @@ export async function analyzeImage(
     },
   ];
 
-  const response = await ai.models.generateContent({
+  const response = await getAi().models.generateContent({
     model: TEXT_MODEL,
     contents,
   });
@@ -59,7 +63,7 @@ export async function generateText(
 ): Promise<string> {
   const contents = systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt;
 
-  const response = await ai.models.generateContent({
+  const response = await getAi().models.generateContent({
     model: TEXT_MODEL,
     contents,
   });
@@ -76,7 +80,7 @@ export async function generateText(
  * @returns Vercel Blob에 업로드된 이미지 URL
  */
 export async function generateImage(prompt: string): Promise<string> {
-  const response = await ai.models.generateContent({
+  const response = await getAi().models.generateContent({
     model: IMAGE_MODEL,
     contents: prompt,
     config: {
@@ -135,7 +139,7 @@ export async function transformImage(
     },
   ];
 
-  const response = await ai.models.generateContent({
+  const response = await getAi().models.generateContent({
     model: IMAGE_MODEL,
     contents,
     config: {
